@@ -1,0 +1,47 @@
+{
+  "id": "atlas-self-update-20260921",
+  "description": "Création de la fiche projet atlas-agent, du plan et ajout journal dans Atlas + note Obsidian",
+  "repositories": {
+    "atlas": {
+      "path": "/home/jerem/workspace/atlas-session-2026-09-21-d590ce75-atlas-agent"
+    }
+  },
+  "vaults": {
+    "obsidian": "/home/jerem/Obsidian/ObsiVault"
+  },
+  "actions": [
+    {
+      "type": "git_commit",
+      "target": "atlas",
+      "message": "docs(atlas): add atlas-agent plan and project card"
+    },
+    {
+      "type": "atlas_journal",
+      "target": "atlas",
+      "title": "Initialisation du projet atlas-agent",
+      "content": "Démarrage de atlas-agent : exécuteur déterministe pour décharger Devin des tâches méta (KSP, Atlas, GitHub, Obsidian). Repo créé à ~/workspace/atlas-agent avec schéma de manifeste, CLI Typer et exécuteurs initiaux."
+    },
+    {
+      "type": "atlas_project",
+      "target": "atlas",
+      "name": "atlas-agent",
+      "statut": "en cours",
+      "notes": "MVP fonctionnel : manifeste JSON/YAML, CLI validate/run/dry-run, actions file/git/Atlas/KSP/Obsidian."
+    },
+    {
+      "type": "obsidian_write",
+      "vault": "obsidian",
+      "path": "Projects/atlas-agent.md",
+      "content": "# atlas-agent\n\nAgent déterministe pour la maintenance KSP, Atlas, GitHub et Obsidian.\n\n## Objectif\n\nDécharger Devin du travail méta : Devin rédige un manifeste, atlas-agent applique.\n\n## Statut\n\nMVP en cours — repo initialisé, manifeste et runner opérationnels.\n\n## Liens\n\n- Repo : <https://github.com/jeremiejt38/atlas-agent>\n- Fiche Atlas : [[atlas-agent]]\n",
+      "frontmatter": {
+        "tags": ["atlas-agent", "devin", "automation"],
+        "created": "2026-09-21"
+      }
+    },
+    {
+      "type": "obsidian_commit",
+      "vault": "obsidian",
+      "message": "docs: ajout fiche projet atlas-agent"
+    }
+  ]
+}
