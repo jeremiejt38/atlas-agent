@@ -1,0 +1,13 @@
+{
+  "packages": {
+    ".": {
+      "package-name": "atlas-agent",
+      "release-type": "python",
+      "extra-files": [
+        "src/atlas_agent/__init__.py"
+      ],
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false
+    }
+  }
+}
