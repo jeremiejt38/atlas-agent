@@ -194,7 +194,7 @@ def _atlas_journal(ctx: Context, action: AtlasJournalAction) -> str:
     ]
     if ctx.dry_run:
         return f"Would run: {' '.join(cmd)}"
-    result = _run(cmd)
+    result = _run(cmd, env={"ATLAS_REPO": str(repo)})
     if result.returncode != 0:
         raise RuntimeError(f"atlas journal ajouter failed: {result.stderr.strip()}")
     return f"Created journal entry {date}: {title}"
@@ -216,7 +216,7 @@ def _atlas_project(ctx: Context, action: AtlasProjectAction) -> str:
     cmd.append(action.name)
     if ctx.dry_run:
         return f"Would run: {' '.join(cmd)}"
-    result = _run(cmd)
+    result = _run(cmd, env={"ATLAS_REPO": str(repo)})
     if result.returncode != 0:
         raise RuntimeError(f"atlas projet maj failed: {result.stderr.strip()}")
     return f"Updated project {action.name}"
