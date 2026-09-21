@@ -1,0 +1,48 @@
+{
+  "id": "example-001",
+  "description": "Example manifest showing all current action types in dry-run mode",
+  "repositories": {
+    "atlas": {
+      "path": "/home/jerem/workspace/atlas"
+    }
+  },
+  "vaults": {
+    "obsidian": "/home/jerem/Obsidian/ObsiVault"
+  },
+  "actions": [
+    {
+      "type": "file_write",
+      "target": "atlas",
+      "path": "tmp/atlas-agent-example.md",
+      "content": "# Example\n\nThis file was written by atlas-agent.",
+      "frontmatter": {
+        "tags": ["example", "atlas-agent"]
+      }
+    },
+    {
+      "type": "atlas_journal",
+      "target": "atlas",
+      "title": "Example journal entry from atlas-agent",
+      "content": ""
+    },
+    {
+      "type": "atlas_project",
+      "target": "atlas",
+      "name": "atlas-agent",
+      "statut": "en cours"
+    },
+    {
+      "type": "ksp_check",
+      "target": "atlas"
+    },
+    {
+      "type": "obsidian_write",
+      "vault": "obsidian",
+      "path": "Projects/atlas-agent-example.md",
+      "content": "# atlas-agent example\n\nNote created by atlas-agent.",
+      "frontmatter": {
+        "tags": ["atlas-agent"]
+      }
+    }
+  ]
+}
