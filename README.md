@@ -15,6 +15,8 @@
 
 atlas-agent takes over the repetitive "meta" work Devin does after a coding session: updating Atlas journals and project cards, keeping KSP compliance consistent, running lightweight GitHub operations and syncing the Obsidian vault.
 
+The Obsidian backend is provided by [atlas-obsidian](https://github.com/jeremiejt38/atlas-obsidian) (formerly obsidian-manager), a Rust daemon that manages the Obsidian vault autonomously.
+
 Devin remains responsible for thinking through the content, but delegates the execution to atlas-agent through a turnkey JSON/YAML manifest. The agent applies actions mechanically and does not use an LLM to rewrite content in the critical path.
 
 ## Features

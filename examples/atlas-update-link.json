@@ -1,0 +1,16 @@
+{
+  "id": "atlas-update-link-20260921",
+  "description": "Met à jour le lien GitHub de la fiche projet atlas-agent",
+  "repositories": {
+    "atlas": {
+      "path": "/home/jerem/workspace/atlas-session-2026-09-21-d590ce75-atlas-agent"
+    }
+  },
+  "actions": [
+    {
+      "type": "git_commit",
+      "target": "atlas",
+      "message": "docs(projects): update atlas-agent GitHub link"
+    }
+  ]
+}

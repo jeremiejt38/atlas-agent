@@ -21,7 +21,7 @@
 - The manifest schema is the public interface; keep it versioned and backward-compatible.
 - Atlas operations reuse the existing `atlas` CLI from the Atlas repo when possible.
 - GitHub operations use the `gh` CLI and require a configured `GH_TOKEN` or interactive `gh auth`.
-- Obsidian operations write directly into the configured vault path and commit via git.
+- Obsidian operations write directly into the configured vault path and commit via git. They can also delegate to the atlas-obsidian Rust daemon when it is installed and enabled.
 - KSP checks run read-only audits by default; applying corrections requires explicit approval in the manifest.
 - All filesystem writes use temporary files + rename (atomic) when feasible.
 - Use subprocess for external tools (`git`, `gh`, `atlas`) and never embed credentials.
