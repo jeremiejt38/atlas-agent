@@ -1,0 +1,22 @@
+{
+  "id": "atlas-extensions-20260921",
+  "description": "Journal entry for atlas-agent extensions",
+  "repositories": {
+    "atlas": {
+      "path": "/home/jerem/workspace/atlas-akasha-website-worktree"
+    }
+  },
+  "actions": [
+    {
+      "type": "git_commit",
+      "target": "atlas",
+      "message": "docs(projects): update atlas-agent card with extensions"
+    },
+    {
+      "type": "atlas_journal",
+      "target": "atlas",
+      "title": "Extensions atlas-agent : GitHub avancé, atlas-obsidian et Talos",
+      "content": "Extensions de l'agent déterministe : ajout des actions GitHub avancées (merge PR, release, commentaire), de la délégation Obsidian au daemon atlas-obsidian (ovm new), et de l'intégration Talos via la queue atlas et l'outil MCP talos_atlas_run."
+    }
+  ]
+}
