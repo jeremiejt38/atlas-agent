@@ -21,11 +21,15 @@ from atlas_agent.manifest import (
     FileAppendAction,
     FileWriteAction,
     GitCommitAction,
+    GitHubCommentAction,
     GitHubPRAction,
+    GitHubPRMergeAction,
+    GitHubReleaseAction,
     GitPushAction,
     KSPCheckAction,
     Manifest,
     ObsidianCommitAction,
+    ObsidianOvmNewAction,
     ObsidianWriteAction,
 )
 
@@ -303,6 +307,69 @@ def _github_pr(ctx: Context, action: GitHubPRAction) -> str:
     return f"Created PR: {result.stdout.strip()}"
 
 
+def _github_pr_merge(ctx: Context, action: GitHubPRMergeAction) -> str:
+    repo = ctx.repo_path(action.target)
+    cmd: list[str] = [
+        "gh",
+        "pr",
+        "merge",
+        str(action.pr_number),
+        f"--{action.method}",
+    ]
+    if action.delete_branch:
+        cmd.append("--delete-branch")
+    else:
+        cmd.append("--no-delete-branch")
+    if ctx.dry_run:
+        return f"Would run: {' '.join(cmd)} in {repo}"
+    result = _run(cmd, cwd=repo)
+    if result.returncode != 0:
+        raise RuntimeError(f"gh pr merge failed: {result.stderr.strip()}")
+    return f"Merged PR #{action.pr_number}"
+
+
+def _github_release(ctx: Context, action: GitHubReleaseAction) -> str:
+    repo = ctx.repo_path(action.target)
+    cmd: list[str] = [
+        "gh",
+        "release",
+        "create",
+        action.tag,
+        "--title",
+        action.title,
+        "--notes",
+        action.notes,
+    ]
+    if action.draft:
+        cmd.append("--draft")
+    if action.prerelease:
+        cmd.append("--prerelease")
+    if ctx.dry_run:
+        return f"Would run: {' '.join(cmd)} in {repo}"
+    result = _run(cmd, cwd=repo)
+    if result.returncode != 0:
+        raise RuntimeError(f"gh release create failed: {result.stderr.strip()}")
+    return f"Created release {action.tag}"
+
+
+def _github_comment(ctx: Context, action: GitHubCommentAction) -> str:
+    repo = ctx.repo_path(action.target)
+    cmd: list[str] = [
+        "gh",
+        "issue",
+        "comment",
+        str(action.number),
+        "--body",
+        action.body,
+    ]
+    if ctx.dry_run:
+        return f"Would run: {' '.join(cmd)} in {repo}"
+    result = _run(cmd, cwd=repo)
+    if result.returncode != 0:
+        raise RuntimeError(f"gh issue comment failed: {result.stderr.strip()}")
+    return f"Commented on #{action.number}"
+
+
 def _ksp_check(ctx: Context, action: KSPCheckAction) -> str:
     repo = ctx.repo_path(action.target)
     issues: list[str] = []
@@ -364,6 +431,32 @@ def _obsidian_commit(ctx: Context, action: ObsidianCommitAction) -> str:
     return f"Committed vault: {action.message}"
 
 
+def _obsidian_ovm_new(ctx: Context, action: ObsidianOvmNewAction) -> str:
+    cmd: list[str] = ["ovm"]
+    if action.config:
+        cmd.extend(["--config", str(action.config)])
+    cmd.extend([
+        "new",
+        action.title,
+        "--type",
+        action.note_type,
+        "--category",
+        action.category,
+    ])
+    if action.subcategory:
+        cmd.extend(["--subcategory", action.subcategory])
+    if action.tags:
+        cmd.extend(["--tags", ",".join(action.tags)])
+    if action.body:
+        cmd.extend(["--body", action.body])
+    if ctx.dry_run:
+        return f"Would run: {' '.join(cmd)}"
+    result = _run(cmd)
+    if result.returncode != 0:
+        raise RuntimeError(f"ovm new failed: {result.stderr.strip()}")
+    return f"Created Obsidian note via ovm: {action.title}"
+
+
 _EXECUTORS: dict[str, Callable[[Context, Action], str]] = {
     "file_write": _file_write,
     "file_append": _file_append,
@@ -373,9 +466,13 @@ _EXECUTORS: dict[str, Callable[[Context, Action], str]] = {
     "git_commit": _git_commit,
     "git_push": _git_push,
     "github_pr": _github_pr,
+    "github_pr_merge": _github_pr_merge,
+    "github_release": _github_release,
+    "github_comment": _github_comment,
     "ksp_check": _ksp_check,
     "obsidian_write": _obsidian_write,
     "obsidian_commit": _obsidian_commit,
+    "obsidian_ovm_new": _obsidian_ovm_new,
 }
 
 

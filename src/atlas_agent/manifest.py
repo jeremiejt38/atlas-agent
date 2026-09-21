@@ -18,9 +18,13 @@ class ActionType(str, Enum):
     GIT_COMMIT = "git_commit"
     GIT_PUSH = "git_push"
     GITHUB_PR = "github_pr"
+    GITHUB_PR_MERGE = "github_pr_merge"
+    GITHUB_RELEASE = "github_release"
+    GITHUB_COMMENT = "github_comment"
     KSP_CHECK = "ksp_check"
     OBSIDIAN_WRITE = "obsidian_write"
     OBSIDIAN_COMMIT = "obsidian_commit"
+    OBSIDIAN_OVM_NEW = "obsidian_ovm_new"
 
 
 class RepositoryMap(BaseModel):
@@ -105,6 +109,31 @@ class GitHubPRAction(Action):
     draft: bool = False
 
 
+class GitHubPRMergeAction(Action):
+    type: Literal[ActionType.GITHUB_PR_MERGE]
+    target: str
+    pr_number: int
+    method: Literal["merge", "squash", "rebase"] = "merge"
+    delete_branch: bool = False
+
+
+class GitHubReleaseAction(Action):
+    type: Literal[ActionType.GITHUB_RELEASE]
+    target: str
+    tag: str
+    title: str
+    notes: str
+    draft: bool = False
+    prerelease: bool = False
+
+
+class GitHubCommentAction(Action):
+    type: Literal[ActionType.GITHUB_COMMENT]
+    target: str
+    number: int
+    body: str
+
+
 class KSPCheckAction(Action):
     type: Literal[ActionType.KSP_CHECK]
     target: str
@@ -125,6 +154,17 @@ class ObsidianCommitAction(Action):
     message: str
 
 
+class ObsidianOvmNewAction(Action):
+    type: Literal[ActionType.OBSIDIAN_OVM_NEW]
+    title: str
+    note_type: str = "simple"
+    category: str = "resources"
+    subcategory: str | None = None
+    tags: list[str] = Field(default_factory=list)
+    body: str = ""
+    config: Path | None = None
+
+
 ActionUnion = Annotated[
     FileWriteAction
     | FileAppendAction
@@ -134,9 +174,13 @@ ActionUnion = Annotated[
     | GitCommitAction
     | GitPushAction
     | GitHubPRAction
+    | GitHubPRMergeAction
+    | GitHubReleaseAction
+    | GitHubCommentAction
     | KSPCheckAction
     | ObsidianWriteAction
-    | ObsidianCommitAction,
+    | ObsidianCommitAction
+    | ObsidianOvmNewAction,
     Field(discriminator="type"),
 ]
 

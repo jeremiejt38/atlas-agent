@@ -24,8 +24,8 @@ Devin remains responsible for thinking through the content, but delegates the ex
 - **Manifest-driven**: one task file describes atomic actions (write files, update projects, commit, push, Obsidian sync, KSP checks).
 - **Deterministic**: no LLM is required to run a manifest; actions are validated and applied mechanically.
 - **Atlas integration**: creates journal entries, updates project cards, edits service/network docs.
-- **Git + GitHub integration**: commits, pushes, and runs `gh` CLI operations.
-- **Obsidian integration**: writes notes into the PARA vault and commits them via git.
+- **Git + GitHub integration**: commits, pushes, creates/merges PRs, creates releases and comments.
+- **Obsidian integration**: writes notes into the PARA vault, commits them via git, or delegates to the `atlas-obsidian` (`ovm`) daemon.
 - **KSP checks**: audits README, CHANGELOG, version and release-please consistency.
 - **Dry-run + validation**: preview and validate manifests before applying them.
 

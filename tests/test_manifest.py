@@ -51,6 +51,37 @@ def test_obsidian_action_without_repo() -> None:
     assert manifest.vaults["obsidian"] == Path("/tmp/vault")
 
 
+def test_github_actions_load() -> None:
+    data = dict(MINIMAL_MANIFEST)
+    data["actions"] = [
+        {"type": "github_pr", "target": "atlas", "title": "t", "body": "b", "head": "feat"},
+        {"type": "github_pr_merge", "target": "atlas", "pr_number": 1},
+        {"type": "github_release", "target": "atlas", "tag": "v0.1.0", "title": "t", "notes": "n"},
+        {"type": "github_comment", "target": "atlas", "number": 1, "body": "lgtm"},
+    ]
+    manifest = Manifest.model_validate(data)
+    assert len(manifest.actions) == 4
+    assert manifest.actions[1].method == "merge"
+
+
+def test_obsidian_ovm_new_loads() -> None:
+    data = {
+        "id": "test-ovm",
+        "description": "ovm new",
+        "actions": [
+            {
+                "type": "obsidian_ovm_new",
+                "title": "My note",
+                "note_type": "project",
+                "category": "projects",
+                "tags": ["atlas-agent"],
+            }
+        ],
+    }
+    manifest = Manifest.model_validate(data)
+    assert manifest.actions[0].title == "My note"
+
+
 def test_invalid_action_type() -> None:
     data = dict(MINIMAL_MANIFEST)
     data["actions"] = [{"type": "unknown_action", "target": "atlas"}]
